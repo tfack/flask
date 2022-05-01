@@ -1,8 +1,27 @@
 {% extends "base.html" %}
+{% set active_page = 'home' %}
 {% block title %} Home {% endblock %}
-{% block content %} <h1>Hello World from Tos!</h1>
-<div id="current_date"></p>
-<script>
-document.getElementById("current_date").innerHTML = Date();
-</script>
+{% block content %} 
+
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+            {% for business in myData %}
+                <tr>
+                    <td>{{ loop.index0 }}</td>
+                    <td>{{ business['name'] }}</td>
+                    <td>{{ business['rating'] }}</td>
+                </tr>
+            {% endfor %}
+    </tr>
+    </tbody>
+  </table>
+
 {% endblock %}
