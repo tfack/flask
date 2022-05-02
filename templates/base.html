@@ -14,11 +14,27 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link {{ 'active' if active_page == 'home' else 'disabled' }}" aria-current="page" href="/home">Home</a>
+          {% if active_page == 'home' and current_user.is_authenticated %}
+            {% set home_class = 'active' %}
+          {% elif not current_user.is_authenticated %}
+            {% set home_class = 'disabled'%}
+          {% endif %}
+
+          <a class="nav-link {{ home_class }}" aria-current="page" href="/home">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{ 'active' if active_page == 'login' }}" href="/login">Login</a>
+          {% if active_page == 'login' %}
+            {% set login_class = 'active' %}
+          {% elif current_user.is_authenticated %}
+            {% set login_class = 'disabled'%}
+          {% endif %}
+
+          <a class="nav-link {{ login_class }}" href="/login">Login</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link {{ 'active' if current_user.is_authenticated else 'disabled' }}" href="/logout">Logout</a>
+        </li>
+
       </ul>
     </div>
   </div>
