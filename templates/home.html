@@ -1,27 +1,24 @@
 {% extends "base.html" %}
 {% set active_page = 'home' %}
 {% block title %} Home {% endblock %}
-{% block content %} 
-
+{% block content %}
 <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Name</th>
-        <th scope="col">Rating</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-            {% for business in myData %}
-                <tr>
-                    <td>{{ loop.index0 }}</td>
-                    <td>{{ business['name'] }}</td>
-                    <td>{{ business['rating'] }}</td>
-                </tr>
-            {% endfor %}
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Rating</th>
     </tr>
-    </tbody>
-  </table>
-
-{% endblock %}
+  </thead>
+  <tbody>
+		{% for business in myData %}
+			<tr>
+				<td class="align-middle">{{ loop.index0 +1}}</td>
+				<td class="align-middle"><img src= {{ business['image_url'] }} class="img-thumbnail" style="max-height:50px;max-width:50px;"> {{ business['name']}}</td>			
+				<td class="align-middle">{{ business['rating']}}</td>			
+			</tr>
+		
+        {% endfor %}
+      </tbody>
+</table>
+ {% endblock %}
