@@ -2,20 +2,117 @@
 {% set active_page = 'home' %}
 {% block title %} Home {% endblock %}
 {% block content %}
+
+<!--<div class="w-50">-->
+<!--<form method="post">-->
+<!--  {{ form.csrf_token }}-->
+<!--  <div class="mb-3">-->
+<!--	<fieldset class="form-field">-->
+<!--		{{ form.date.label(class="form-label") }}-->
+<!--		{{ form.date(class="form-control") }}-->
+<!--		{% if form.date.errors %}-->
+<!--            <ul class="errors">-->
+<!--              {% for error in form.date.errors %}-->
+<!--				`  <li>{{ error }}</li>-->
+<!--              {% endfor %}-->
+<!--            </ul>-->
+<!--	    {% endif %}-->
+<!--    </fieldset>-->
+<!--  </div>-->
+<!--  <div class="mb-3">-->
+<!--	<fieldset class="form-field">-->
+<!--		{{ form.numresults.label(class="form-label") }}-->
+<!--		{{ form.numresults(class="form-control") }}-->
+<!--    </fieldset>-->
+<!--  </div>-->
+<!--  {{ form.submit(class="btn btn-primary") }}-->
+<!--</form>-->
+<!--</div>-->
+
+<table class="table">
+<form method="post">
+  {{ form.csrf_token }}
+  <tbody>
+    <tr>
+      <td width="25%">
+          <fieldset class="form-field">
+                {{ form.date.label(class="form-label") }}
+                {{ form.date(class="form-control") }}
+<!--                {% if form.date.errors %}-->
+<!--                    <ul class="errors">-->
+<!--                      {% for error in form.date.errors %}-->
+<!--                        `  <li>{{ error }}</li>-->
+<!--                            <li>{{ form.date }} </li>-->
+<!--                      {% endfor %}-->
+<!--                    </ul>-->
+<!--                {% endif %}-->
+            </fieldset>
+      </td>
+      <td width=25%>
+          	<fieldset class="form-field">
+        		{{ form.numresults.label(class="form-label") }}
+	        	{{ form.numresults(class="form-control") }}
+            </fieldset>
+      </td>
+      <td>
+        <br>
+          {{ form.submit(class="btn btn-primary") }}
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!--  <div style = "width: 150px; float: left; margin: 10px" class="form-group">-->
+<!--  <label for="date">Enter birthday:</label>-->
+<!--  <input type="text" class="form-control" id="date">-->
+<!--</div>-->
+<!--<div style = "width: 150px; float: left; margin: 10px" class="form-group">-->
+<!--  <label for="results">Number of results:</label>-->
+<!--  <input type="text" class="form-control" id="results">-->
+<!--</div-->
+<!--<div class="form-group">-->
+<!--    <label style = "width: 10px; height: 56px"></label>-->
+<!--  <button type="button" class="btn btn-primary">Search</button>-->
+<!--</div>-->
+<!--   <form method="post">-->
+<!--        <label for="date">Date</label>-->
+<!--        <br>-->
+<!--        &lt;!&ndash;value={{request.form['title]']}} is to restore data if things go wrong&ndash;&gt;-->
+<!--        <input type="text" name="date"-->
+<!--               placeholder="MM/DD/YYY"-->
+<!--               value="{{ request.form['date'] }}"></input>-->
+<!--        <br>-->
+
+<!--        <label for="content">Max returns</label>-->
+<!--        <br>-->
+<!--        <input type = "text" name="numresults"-->
+<!--                  placeholder="Max returns"-->
+<!--                  value="{{ request.form['numresults'] }}"></input>-->
+<!--        <br>-->
+<!--        <button type="submit">Submit</button>-->
+<!--    </form>-->
+
 <table class="table table-striped">
   <thead>
-    <tr>
+
+<tr>
       <th scope="col">#</th>
       <th scope="col">Name</th>
-      <th scope="col">Rating</th>
+      <th scope="col">Birth Year</th>
     </tr>
   </thead>
   <tbody>
-		{% for business in myData %}
+		{% for person in myData %}
 			<tr>
 				<td class="align-middle">{{ loop.index0 +1}}</td>
-				<td class="align-middle"><img src= {{ business['image_url'] }} class="img-thumbnail" style="max-height:50px;max-width:50px;"> {{ business['name']}}</td>			
-				<td class="align-middle">{{ business['rating']}}</td>			
+				<td class="align-middle"><img src= {{ person['thumbnail'] }} class="img-thumbnail" style="max-height:50px;max-width:50px;"> {{ person['text']}}</td>			
+				<td class="align-middle">{{ person['year']}}</td>			
 			</tr>
 		
         {% endfor %}

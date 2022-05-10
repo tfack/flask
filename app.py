@@ -1,20 +1,18 @@
 from flask import Flask, render_template, request, redirect
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField,SubmitField
-from wtforms.validators import DataRequired, Length, EqualTo, Email
-from yelp import find_coffee
+from wtforms import StringField, PasswordField, SubmitField, IntegerField, DateField
+from wtforms.validators import DataRequired, Length, EqualTo, Email, InputRequired, NumberRange
+from wiki import findBirths
 from flask_login import current_user, login_user, login_required, logout_user
 from models import db, login, UserModel
+from datetime import datetime
 
-class loginForm(FlaskForm):
-    email=StringField(label="Enter email", validators=[DataRequired(),Email()])
-    password=PasswordField(label="Enter password",validators=[DataRequired(), Length(min=6,max=16)])
-    submit=SubmitField(label="Login")
-
-#passwords={}
-#passwords['tos@uw.edu']='qwerty'
+# #//passwords={}
+# #//passwords['tos@uw.edu']='qwerty'
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your secret key'
+
 app.secret_key="a secret"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/login.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -36,10 +34,49 @@ def create_table():
     if user is None:
         addUser('tos@uw.edu', 'qwerty')
 
-@app.route("/home")
+class loginForm(FlaskForm):
+    email=StringField(label="Enter email", validators=[DataRequired(),Email()])
+    password=PasswordField(label="Enter password",validators=[DataRequired(), Length(min=6,max=16)])
+    submit=SubmitField(label="Login")
+
+class bdayForm(FlaskForm):
+    date = DateField(label='Birth date', format="%Y-%m-%d")
+    numresults = IntegerField('Max # returns', validators=[InputRequired(), NumberRange(min=1,max=20,
+                                                            message='Must enter number between 1 and 20')])
+    submit=SubmitField(label="Search")
+
+@app.route("/home",methods=['GET','POST'])
 @login_required
-def findCoffee():
-    return render_template("home.html", myData=find_coffee())
+def home():
+    form=bdayForm()
+    if form.validate_on_submit():
+        dte_str = str(form.date.data)
+        dte_obj = datetime.strptime(dte_str, "%Y-%m-%d")
+        year = dte_obj.strftime("%Y")
+        dd = dte_obj.strftime("%d")
+        mm = dte_obj.strftime("%m")
+        date = f"{mm}/{dd}"
+        numresults = request.form["numresults"]
+        return render_template("home.html", myData=findBirths(date, year, numresults),form=form)
+    else:
+        print(f"error: {form.date.data}")
+        print(form.errors)
+    return render_template("home.html",form=form)
+
+#         year = dte[:4]
+#         dd = dte[-2:]
+#         mm = dte[5:7]
+#         date = f"{mm}/{dd}"
+
+#     if request.method == "POST":
+#         date = request.form["date"]
+#         dt = datetime.strptime(date, "%m/%d/%Y")
+#         date = datetime.strftime(dt, "%m/%d")
+#         year = datetime.strftime(dt, "%Y")
+#         numresults = request.form["numresults"]
+#         return render_template("home.html", myData=findBirths(date, year, numresults))
+#     return render_template("home.html", myData=findBirths("07/16","1973",10))
+
 
 @app.route("/")
 def redirectToLogin():
