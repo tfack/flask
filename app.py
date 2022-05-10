@@ -63,21 +63,6 @@ def home():
         print(form.errors)
     return render_template("home.html",form=form)
 
-#         year = dte[:4]
-#         dd = dte[-2:]
-#         mm = dte[5:7]
-#         date = f"{mm}/{dd}"
-
-#     if request.method == "POST":
-#         date = request.form["date"]
-#         dt = datetime.strptime(date, "%m/%d/%Y")
-#         date = datetime.strftime(dt, "%m/%d")
-#         year = datetime.strftime(dt, "%Y")
-#         numresults = request.form["numresults"]
-#         return render_template("home.html", myData=findBirths(date, year, numresults))
-#     return render_template("home.html", myData=findBirths("07/16","1973",10))
-
-
 @app.route("/")
 def redirectToLogin():
     return redirect("/login")
@@ -99,6 +84,19 @@ def login():
 def logout():
     logout_user()
     return redirect('/login')
+
+@app.route('/owner')
+def owner():
+    text = "Hello world from Tos!"
+    return render_template("hw2.html",text=text)
+
+@app.route('/datetime')
+def dtime():
+    now = datetime.now()
+    dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
+    text = dt_string
+    return render_template("hw2.html",text=text)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True)
