@@ -1,0 +1,26 @@
+
+
+{% block body %}
+    <div class="container">
+        <form action="/add" method="POST">
+            <div class="mb-3">
+              <label for="title" class="form-label">Event title</label>
+              <input type="text" class="form-control" name="title" id="title" placeholder="Enter the event title">
+            </div>
+            <div class="mb-3">
+              <label for="start" class="form-label">Start date</label>
+              <input type="text" class="form-control" name="start" id="start" placeholder="Format is YYYY-MM-DDtHH:MM">
+            </div>
+            <div class="mb-3">
+                <label for="start" class="form-label">End date</label>
+                <input type="text" class="form-control" name="end" id="end" placeholder="Leave empty for all-day event">
+            </div>
+            <div class="mb-3">
+                <label for="url" class="form-label">Event url</label>
+                <input type="url" class="form-control" name="url" id="url" placeholder="">
+            </div>
+            <button type="submit" class="btn btn-outline-dark">Submit</button>
+          </form>        
+    </div>
+
+{% endblock body %}

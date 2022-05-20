@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;700&display=swap');
+
+:root {
+  --primary: #8B2B17;
+  --dark: #0C0309;
+  --body: #888;
+  --white: #ffffff;
+  --box-shadow: 0 8px 22px rgba(0,0,0,0.1);
+
+}
+
+.btn-primary {
+  background-color: #8B2B17;
+  border-color: #21252f;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+  background-color: #1D0C0A;
+}
+
+body {
+  font-family: Sora, "sans-serif";
+  line-height: 1.7;
+  color: var(--body);
+}
+
+h1,h2,h3,h4,h5,h6,
+.display-4 {
+  color: var(--dark);
+  font-weight: 600;
+}
+
+a {
+  color: var(--dark);
+  text-decoration: none;
+}
+
+.navbar .logo {
+  width: 200px;
+}
+
+.navbar .nav-link {
+  font-size: 14;
+  font-weight: 700;
+}
+
+.hero {
+  background-image: url(../img/movietime.png);
+  background-size: cover;
+  background-attachment: fixed;
+  position: relative;
+  z-index: 2;
+}
+
+.hero::after {
+  content:"";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top:0;
+  left: 0;
+  background-color: rgb(21, 20, 51, 0.3);
+  z-index: -1;
+}

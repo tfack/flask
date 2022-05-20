@@ -8,16 +8,9 @@
   {{ form.csrf_token }}
   <tbody>
     <tr>
-      <td width="25%">
-          <fieldset class="form-field">
-                {{ form.date.label(class="form-label") }}
-                {{ form.date(class="form-control") }}
-            </fieldset>
-      </td>
       <td width=25%>
           	<fieldset class="form-field">
-        		{{ form.numresults.label(class="form-label") }}
-	        	{{ form.numresults(class="form-control") }}
+	        	{{ form.text(class="form-control") }}
             </fieldset>
       </td>
       <td>
@@ -43,14 +36,5 @@
     </tr>
   </thead>
   <tbody>
-		{% for person in myData %}
-			<tr>
-				<td class="align-middle">{{ loop.index0 +1}}</td>
-				<td class="align-middle"><img src= {{ person['thumbnail'] }} class="img-thumbnail" style="max-height:50px;max-width:50px;"> {{ person['text']}}</td>			
-				<td class="align-middle">{{ person['year']}}</td>			
-			</tr>
-		
-        {% endfor %}
-      </tbody>
+    {% endblock %}
 </table>
- {% endblock %}

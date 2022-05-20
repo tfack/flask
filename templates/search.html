@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% set active_page = 'Binge-Planner' %}
+{% block title %} Binge-Planner
+<link href="./static/css/style.css" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+    <form action="#" method="post">
+    {{ form.csrf_token }}
+<!--    <div class="row" style = "background-image: url({{ url_for('static', filename='image.jpg', mode = 'fit') }})"> -->
+      <div class = "row">
+      <div class="col">
+            {{ form.search_text.label(class="form-label") }}
+		    {{ form.search_text(class="form-control") }}
+        </div>
+
+        <div class="col">
+          <br>
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </div>
+    </form>
+
+<!--    <table class="table" style = "background-image: url({{ url_for('static', filename='image.jpg', mode = 'fit') }})">  -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for result in myData %}
+      <tr>
+        <th scope="row"></th>
+        <td class="align-middle"><img src={{ result['image'] }} class="img-thumbnail" style="max-height:150px;max-width:150px;">
+            <a class="align-middle" href="[Put new page here]" target="_blank" rel="noopener noreferrer">
+                {{ result['title']}} </a> </td>
+        <td class="align-middle">{{ result['description']}}</td>
+      </tr>
+  {% endfor %}
+  </tbody>
+</table>
+  
+ {% endblock %}

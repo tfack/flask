@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel = "stylesheet" href = "https://cdn.jsdelivr.net/npm/fullcalendar@5.4.0/main.min.css">
+    <script src = "https://cdn.jsdelivr.net/npm/fullcalendar@5.4.0/main.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  
+    </head>
+<body>
+
+    <div class="container">
+        <!-- Trigger the modal with a button -->
+        <div class="text-center">
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Add Event</button>
+        </div>
+
+        {% block body %}
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+          <div class="modal-dialog">
+          
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Event</h4>
+              </div>
+              <div class="modal-body">
+
+                <div class="container">
+                    <form action="/add" method="POST">
+                        <div class="mb-3">
+                          <label for="title" class="form-label">Event title</label>
+                          <input type="text" class="form-control-small" name="title" id="title" placeholder="Enter the event title">
+                        </div>
+                        <div class="mb-3">
+                          <label for="start" class="form-label">Start date</label>
+                          <input type="text" class="form-control-small" name="start" id="start" placeholder="Format is YYYY-MM-DDtHH:MM">
+                        </div>
+                        <div class="mb-3">
+                            <label for="start" class="form-label">End date</label>
+                            <input type="text" class="form-control-small" name="end" id="end" placeholder="Leave empty for all-day event">
+                        </div>
+                        <div class="mb-3">
+                            <label for="url" class="form-label">Event url</label>
+                            <input type="url" class="form-control-small" name="url" id="url" placeholder="">
+                        </div>
+                        <button type="submit" class="btn btn-outline-dark">Submit</button>
+                      </form>        
+                </div>
+            
+                {% endblock body %}
+
+            </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+      </div>
+        
+
+    <div class = "container my-3">
+        <div id = "calendar"></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+        aspectRatio: 2,
+    events : [
+        {% for event in events %}
+        {
+            title: '{{event.title}}',
+            start: '{{event.start}}',
+            end: '{{event.end}}',
+            url: '{{event.url}}',
+        },
+    
+        {% endfor %}
+        ],
+
+        eventClick: function(info) {
+            alert('Event: ' + info.event.title);
+        
+            // change the border color just for fun
+            info.el.style.borderColor = 'red';
+          }
+        
+
+        });
+    
+    calendar.render();
+    });
+
+</script>
+
+</body>
+</html>
+
