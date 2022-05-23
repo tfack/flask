@@ -1,0 +1,11 @@
+flask==2.1.2
+flask-wtf
+email_validator
+requests
+flask-login
+flask-sqlalchemy
+psycopg2-binary
+gunicorn
+pandas
+plotly
+plotly-express

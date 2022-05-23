@@ -5,14 +5,11 @@ from wtforms.validators import DataRequired, Length, EqualTo, Email, InputRequir
 from wiki import find_titles
 from flask_login import current_user, login_user, login_required, logout_user
 from models import db, login, UserModel
+from models2 import db2, login2, UserModel2
 from datetime import datetime
-# from dateutil import parser
 
 # #//passwords={}
 # #//passwords['tos@uw.edu']='qwerty'
-
-# now = datetime.now()
-# parser(now)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your secret key'
@@ -37,29 +34,53 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/login.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+db2.init_app(app)
 login.init_app(app)
+login2.init_app(app)
 
 def addUser(email, password):
-    print(f"adding user: {email}, password: {password}")
     user=UserModel()
     user.set_password(password)
     user.email = email
     db.session.add(user)
     db.session.commit()
-    print(f"user {user} added")
     return user
+
+def addUser2(username, password):
+    user2=UserModel2()
+    user2.set_password(password)
+    user2.username = username
+    db2.session.add(user2)
+    db2.session.commit()
+    return user2
 
 @app.before_first_request
 def create_table():
     db.create_all()
+    db2.create_all()
     user = UserModel.query.filter_by(email = 'tos@uw.edu').first()
     if user is None:
         addUser('tos@uw.edu', 'qwerty')
-
+    user2 = UserModel2.query.filter_by(username = 'test').first()
+    if user2 is None:
+        addUser2('test', 'qwerty')
+        
 class loginForm(FlaskForm):
     email=StringField(label="Email address",validators=[DataRequired(),Email()])
     password=PasswordField(label="Enter password",validators=[DataRequired(), Length(min=6,max=16)])
     submit=SubmitField(label="Login")
+
+### THIS SECTION IS FOR HOMEWORK 5 ONLY ###
+class hwLoginForm(FlaskForm):
+    username=StringField(label="Username",validators=[DataRequired(), Length(min=6,max=20)])
+    password=PasswordField(label="Enter password",validators=[DataRequired(), Length(min=6,max=16)])
+    submit=SubmitField(label="Login")
+
+class hwRegForm(FlaskForm):
+    username=StringField(label="Username",validators=[DataRequired(), Length(min=6,max=20)])
+    password=PasswordField(label="Enter password",validators=[DataRequired(), Length(min=6,max=16)])
+    submit=SubmitField(label="Register")
+###                                      ###
 
 class signupForm(FlaskForm):
     email=StringField(label="Email address",validators=[DataRequired(),Email()])
@@ -77,15 +98,6 @@ class searchForm(FlaskForm):
     search_text=StringField(validators=[DataRequired()])
     submit=SubmitField(label="Search")
 
-# @app.route("/home",methods=['GET','POST'])
-# @login_required
-# def home():
-#     form=searchForm()
-#     if form.validate_on_submit():
-#         srch = str(form.text.data)
-#         return render_template("home.html", myData=srchIMDB(srch),form=form)
-#     return render_template("home.html",form=form)
-
 @app.route("/search",methods=['GET','POST'])
 @login_required
 def search():
@@ -101,27 +113,15 @@ def search():
     return render_template("search.html",form=form)
 
 @app.route("/home",methods=['GET','POST'])
-# @login_required
+@login_required
 def home():
-    # form=bdayForm()
-    # if form.validate_on_submit():
-    #     dte_str = str(form.date.data)
-    #     dte_obj = datetime.strptime(dte_str, "%Y-%m-%d")
-    #     year = dte_obj.strftime("%Y")
-    #     dd = dte_obj.strftime("%d")
-    #     mm = dte_obj.strftime("%m")
-    #     date = f"{mm}/{dd}"
-    #     numresults = request.form["numresults"]
-    #     return render_template("home.html", myData=findBirths(date, year, numresults),form=form)
-    # else:
-    #     print(f"error: {form.date.data}")
-    #     print(form.errors)
-    # return render_template("home.html",form=form)
     return render_template("index.html")
 
+### THIS SECTION IS FOR HOMEWORK 5 ONLY ###
 @app.route("/")
 def redirectToLogin():
-    return redirect("/home")
+    return redirect("/login")
+###                                     ###
 
 @app.route("/signin",methods=['GET','POST'])
 def signin():
@@ -136,6 +136,28 @@ def signin():
                 print(f"logging in user: {user}")
                 return redirect('/search')
     return render_template("signin.html",form=form)
+
+### THIS SECTION IS FOR HOMEWORK 5 ONLY ###
+@app.route("/login",methods=['GET','POST'])
+def login():
+    form=hwLoginForm()
+    if form.validate_on_submit():
+        if request.method == "POST":
+            username=request.form["username"]
+            pw=request.form["password"]
+            user = UserModel2.query.filter_by(username = username).first()
+            if user is not None: 
+                if user.check_password(pw):
+                    login_user(user)
+                    print(f"logging in user: {user}")
+                    return redirect('/search')
+            else:
+                print(form.errors)
+                return render_template("login.html", form=form, fail="failed")
+    else:
+        print(form.errors)
+    return render_template("login.html",form=form)
+###                               ###
 
 @app.route('/logout')
 def logout():
@@ -192,9 +214,31 @@ def signup():
         print("GET request")
     return render_template("signup.html",form=form)
 
-# @app.route('/signin.html')
-# def signin():
-#     return render_template("signin.html")
+### THIS SECTION IS FOR HOMEWORK 5 ONLY ###
+@app.route('/register.html',methods=['GET','POST'])
+def register():
+    form=hwRegForm()
+    if form.validate_on_submit():
+        if request.method == "POST":
+            username=request.form["username"]
+            pw=request.form["password"]
+            user = UserModel2.query.filter_by(username = username).first()
+            print(f"user: {user}")
+            if user is None:
+                newuser = addUser2(username, pw)
+                print(f"adding user: {newuser}")
+                login_user(newuser)
+                print(f"logged in user: {newuser}")
+                return redirect('/login')
+            else:
+                print(f"else user is not none: {user}")
+                return redirect('/register')
+        else:
+            print("GET request")
+    else:
+        print(form.errors)
+    return render_template("register.html",form=form)
+###                                  ###
 
 @app.route('/calendar')
 def calendar():

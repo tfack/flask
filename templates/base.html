@@ -26,8 +26,12 @@
                 <li class="nav-item">
                     <a href="calendar" class="nav-link">Calendar</a>
                 </li>
+                <li class="nav-item">
+                    <a href="logout" class="nav-link">Log out</a>
+                </li>
             </ul>
-            <a href="signin.html" class="btn btn-primary ms-lg-3">Sign In</a>
+      
+            <a href="signin.html" class="btn btn-primary ms-lg-3 {{ 'invisible' if current_user.is_authenticated else 'visible' }}">Sign In</a>
         </div>
     </div>
 </nav><!-- //NAVBAR -->
