@@ -151,6 +151,10 @@ def login():
                     login_user(user)
                     print(f"logging in user: {user}")
                     return redirect('/search')
+                else:
+                    print(form.errors)
+                    return render_template("login.html", form=form, fail="failed")
+
             else:
                 print(form.errors)
                 return render_template("login.html", form=form, fail="failed")
